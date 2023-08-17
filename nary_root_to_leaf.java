@@ -133,4 +133,5 @@ private static void findMaxPathSumHelper(Node node, int currentSum, List<Node> c
     }
 
 // follow up 是 一‍‍‍‍‍‍‍‍‌‍‌‌‍‌‌‌‌‌个node, 多个parent, dfs/bfs 会重复读取
-
+2，N-tree的root-leaf最大值，标准dfs
+可能我写的比较块，问了很多follow up，时间空间，input里有环‍‍‍‍‍‍‍‍‌‍‌‌‍‌‌‌‌‌怎么判断，怎么提升效率等等。白人小哥，待了3年的senior，人挺好的
