@@ -1,3 +1,8 @@
+//Time Complexity: O(n),Each node is visited once, 
+//        and the time complexity is linearly proportional to the number of nodes in the tree.
+//Space Complexity: O(h), similar to the getRootToLeafSum function. 
+//        The recursive call stack can go as deep as the height of the tree.
+
 public class roo_to_leaf {
     public static void  main(String[] args){
         TreeNode root = new TreeNode(1);
