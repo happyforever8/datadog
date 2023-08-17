@@ -131,3 +131,6 @@ private static void findMaxPathSumHelper(Node node, int currentSum, List<Node> c
 
         currentPath.remove(currentPath.size() - 1);
     }
+
+// follow up 是 一‍‍‍‍‍‍‍‍‌‍‌‌‍‌‌‌‌‌个node, 多个parent, dfs/bfs 会重复读取
+
