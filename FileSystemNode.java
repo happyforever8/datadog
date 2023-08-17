@@ -1,7 +1,8 @@
 import java.util.HashMap;
 import java.util.Map;
 
-
+ // 给一个file system structure (json) 算出所有文件的内存大小。去壳：遍历树并求叶子的值之和
+     
 // tims is O(N), n is path length
 // space is O(h), h is the depth of file
 class FileSystemNode {
