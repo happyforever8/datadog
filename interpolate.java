@@ -13,6 +13,12 @@ import java.util.List;
 //        which could have up to n * interval interpolated points in the worst case.
 //
 
+// 将 x 替换为 x1 + 5，即新的横坐标。
+// 具体计算步骤如下：
+
+// 使用点斜式方程 y - y1 = m(x - x1) 得到 y - y1 = m(x1 + 5 - x1)。
+// 化简方程，得到 y - y1 = 5m。
+// 求解出 y，得到 y = y1 + 5m。
 public class Interpolation {
     static class Point {
         int x;
