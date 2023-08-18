@@ -1,6 +1,10 @@
 import java.util.ArrayList;
 import java.util.List;
 
+// Time complexity: O(N)
+// Space complexity: O(N) N is totla node
+// The space complexity is determined by the call stack during recursion, which is proportional to the height of the tree.
+// In the worst case, where the tree is linear (essentially a linked list), the space complexity for the call stack is O(N).
 class Node {
     int val;
     List<Node> children;
@@ -135,3 +139,42 @@ private static void findMaxPathSumHelper(Node node, int currentSum, List<Node> c
 // follow up 是 一‍‍‍‍‍‍‍‍‌‍‌‌‍‌‌‌‌‌个node, 多个parent, dfs/bfs 会重复读取
 2，N-tree的root-leaf最大值，标准dfs
 可能我写的比较块，问了很多follow up，时间空间，input里有环‍‍‍‍‍‍‍‍‌‍‌‌‍‌‌‌‌‌怎么判断，怎么提升效率等等。白人小哥，待了3年的senior，人挺好的
+
+1.Maintain a visited array to track the visited nodes during DFS traversal.
+2.Initialize the visited array as false for all nodes.
+3.During DFS traversal, mark nodes as visited when they are visited for the first time.
+4. If a node is encountered again during traversal, and it's already marked as visited, then a cycle is detected.
+
+    Memoization: You can use memoization to avoid redundant calculations when traversing the same subtree multiple times.
+
+
+    public class MaxPathSumNary {
+    public static int findMaxPathSum(Node root) {
+        if (root == null) {
+            return 0;
+        }
+
+        return findMaxPathSumHelper(root, new HashSet<>());
+    }
+
+    private static int findMaxPathSumHelper(Node node, Set<Node> visited) {
+        if (node == null || visited.contains(node)) {
+            return 0;
+        }
+
+        visited.add(node);
+
+        int maxChildSum = 0;
+        for (Node child : node.children) {
+            maxChildSum = Math.max(maxChildSum, findMaxPathSumHelper(child, visited));
+        }
+
+        visited.remove(node);
+
+        return maxChildSum + node.val;
+    }
+}
+
+
+
+
