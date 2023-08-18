@@ -6,7 +6,8 @@ class FileSystem_path {
     public FileSystem_path(JSONObject root) {
         this.root = root;
     }
-
+//where the path length is n, the time complexity is O(n).
+// space is O(n)
     public int calculateSizeAtPath(String path) {
         JSONObject currentNode = root;
 
@@ -22,7 +23,8 @@ class FileSystem_path {
 
         return calculateTotalSize(currentNode);
     }
-
+//time where each node has a direct child node, the number of nodes is O(m). 
+    // space is where the JSON object has a maximum depth of d, O(d)
     public int calculateTotalSize(JSONObject node) {
         int totalSize = 0;
 
