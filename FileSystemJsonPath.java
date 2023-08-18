@@ -40,19 +40,11 @@ class FileSystem_path {
     }
 
     public static void main(String[] args) {
-        String jsonString = "{\"home\": {\"me\": {\"foo.txt\": 231, \"abs.txt\": 443}, \"haha.css\": 52}}";
-
-
-        JSONObject fileSystem = new JSONObject(json);
-        int totalMemory = calculateMemory(fileSystem);
-        System.out.println("Total memory used by all files: " + totalMemory + " KB");
-
-        
-
+        String jsonString = "{\"home\":{\"me\":{\"foo.txt\":231,\"abs.txt\":443,\"him\":{\"abs.txt\":100}},\"haha.css\":52}}";
         JSONObject root = new JSONObject(jsonString);
         FileSystem_path fileSystem = new FileSystem_path(root);
 
-        String specificPath = "/home/me/1";
+        String specificPath = "/home/me/him";
         int pathSize = fileSystem.calculateSizeAtPath(specificPath);
 
         if (pathSize >= 0) {
