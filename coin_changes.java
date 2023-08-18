@@ -2,6 +2,8 @@ import java.util.*;
 
 public class coinChange {
 
+    // tims is o(amount * number_of_coins)
+    // space is O(amount + 1)
     public static void main(String[] args){
 
         int[] coins = {1, 2, 5, 25};
