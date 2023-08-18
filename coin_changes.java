@@ -2,12 +2,10 @@ import java.util.*;
 
 public class coinChange {
 
-    // tims is o(amount * number_of_coins)
-    // space is O(amount + 1)
     public static void main(String[] args){
 
         int[] coins = {1, 2, 5, 25};
-        System.out.println(coinChange(coins, 33));
+        System.out.println(coinChange(coins, 37));
     }
 
     //在编程表示中，我们发现 DP 数组中的值最大也只能是 amount（只有 1 元硬币的情况，硬币数量等于金额数），
@@ -38,27 +36,46 @@ public class coinChange {
                 }
             }
 
-          // 打印coin list
-            // List<Integer> coinList = new ArrayList<>();
-            // int remainingAmount = amount;
-            // while (remainingAmount > 0) {
-            //     for (int coin : coins) {
-            //         if (remainingAmount - coin >= 0 && dp[remainingAmount] == dp[remainingAmount - coin] + 1) {
-            //             coinList.add(coin);
-            //             remainingAmount -= coin;
-            //             break;
-            //         }
-            //     }
-            // }
+            // to print out coin list
+            List<Integer> coinList = new ArrayList<>();
+            int remainingAmount = amount;
+            while (remainingAmount > 0) {
+                for (int coin : coins) {
+                    if (remainingAmount - coin >= 0 && dp[remainingAmount] == dp[remainingAmount - coin] + 1) {
+                        coinList.add(coin);
+                        remainingAmount -= coin;
+                        break;
+                    }
+                }
+            }
 
-            // for (int coin: coinList){
-            //     System.out.println(coin);
-            // }
+//            for (int coin: coinList){
+//                System.out.println(coin);
+//            }
+
+            // to print out coin count for each coint
+            int[] coinCount = new int[coins.length];
+            int remaining = amount;
+            int coinIndex = coins.length - 1;
+
+            while (remaining > 0) {
+                for (int i = coinIndex; i >= 0; i--) {
+                    if (coins[i] <= remaining && dp[remaining] == dp[remaining - coins[i]] + 1) {
+                        coinCount[i]++;
+                        remaining -= coins[i];
+                        break;
+                    }
+                }
+            }
+            for (int coin: coinCount){
+                System.out.println(coin);
+            }
+
+
             return dp[amount] == amount + 1 ? - 1 : dp[amount];
         }
     }
 
-// DFS
 // public class Solution {
 // public int coinChange(int[] coins, int amount) {
 //     if(amount<1) return 0;
