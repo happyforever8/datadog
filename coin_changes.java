@@ -99,3 +99,26 @@ public class coinChange {
 // }
 // }
 
+1. 换硬币, 建议直接从大到小直接遍历，follow up 就是leetcode那个DP的题，问你怎么优化，给定的硬币如果不一样了，能否从大到小继续这样做等等
+ public static int[] coinChange(int[] coins, int amount) {
+        Arrays.sort(coins); // Sort coins in descending order
+        int[] coinCount = new int[coins.length];
+
+        for (int i = coins.length - 1; i >= 0; i--) {
+            coinCount[i] = amount / coins[i];
+            amount %= coins[i];
+        }
+
+        return coinCount;
+    }
+
+    public static void main(String[] args) {
+        int[] coins = {25, 10, 5, 1};
+        int amount = 63;
+
+        int[] coinCount = coinChange(coins, amount);
+        System.out.println("Coin count for each coin:");
+        for (int i = 0; i < coins.length; i++) {
+            System.out.println(coins[i] + " cents: " + coinCount[i]);
+        }
+
