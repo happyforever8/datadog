@@ -7,7 +7,7 @@ public class coinChange {
         int[] coins = {1, 2, 5, 25};
         System.out.println(coinChange(coins, 37));
     }
-
+    //O(amount * number of coins) and a space complexity of O(amount),
     //在编程表示中，我们发现 DP 数组中的值最大也只能是 amount（只有 1 元硬币的情况，硬币数量等于金额数），
     //   PS：为啥 dp 数组初始化为 amount + 1 呢，
     //   因为凑成 amount 金额的数最多只可能等于 amount（全用 1 元面值的），
@@ -82,6 +82,7 @@ public class coinChange {
 //     return helper(coins, amount, new int[amount]);
 // }
 
+// O(amount * number of coins) and a space complexity of O(amount),
 // private int helper(int[] coins, int rem, int[] count) { /
 // rem:        remaining coins after the last step;
 // count[rem]: minimum number of coins to sum up to rem
