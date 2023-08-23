@@ -3,6 +3,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
+// ime complexity of O(n) and a space complexity of O(numBuckets), where n is the number of integers in the input
 public class BucketCounter {
     public static Map<String, Integer> countBuckets(List<Integer> integers, int numBuckets, int bucketWidth) {
         Map<String, Integer> bucketCountMap = new HashMap<>();
