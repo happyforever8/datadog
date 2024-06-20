@@ -39,22 +39,23 @@ Output would be:
 
 
 
-  import java.util.*;
+ import java.util.*;
 
 public class Main {
     private static Map<String, Integer> queriesDict;
-    private static Map<String, List<Integer>> revertedIdx;
+    private static Map<Integer, Set<String>> queriesWords;
     private static int id;
 
     public static void main(String[] args) {
         queriesDict = new HashMap<>();
-        revertedIdx = new HashMap<>();
+        queriesWords = new HashMap<>();
         id = 1;
 
         input("Q: hello world");
         input("Q: data failure");
         input("Q: world hello");
-        input("L: hello world we have a data failure");
+        input("Q: world world hello");
+        input("L: hello world world hello we have a data failure");
         input("L: oh no system error");
         input("Q: system error");
         input("L: oh no system error again");
@@ -79,34 +80,32 @@ public class Main {
 
         if (tp.equals("Q")) {
             Map<String, Integer> counter = new HashMap<>();
+            Set<String> wordSet = new HashSet<>();
             for (String word : words) {
                 counter.put(word, counter.getOrDefault(word, 0) + 1);
+                wordSet.add(word);
             }
             String hash = getHashFromCounters(counter);
             if (!queriesDict.containsKey(hash)) {
                 queriesDict.put(hash, id);
-                for (String word : counter.keySet()) {
-                    if (!revertedIdx.containsKey(word)) {
-                        revertedIdx.put(word, new ArrayList<>());
-                    }
-                    revertedIdx.get(word).add(id);
-                }
+                queriesWords.put(id, wordSet);
                 System.out.println("Registered q" + id);
                 id++;
             } else {
                 System.out.println("Registered q" + queriesDict.get(hash));
             }
         } else if (tp.equals("L")) {
+            Set<String> logWords = new HashSet<>(Arrays.asList(words));
             List<Integer> result = new ArrayList<>();
-            for (String word : words) {
-                if (revertedIdx.containsKey(word)) {
-                    for (int q : revertedIdx.get(word)) {
-                        if (!result.contains(q)) {
-                            result.add(q);
-                        }
-                    }
+
+            for (Map.Entry<Integer, Set<String>> entrySet : queriesWords.entrySet()) {
+                int queryId = entrySet.getKey();
+                Set<String> queryWords = entrySet.getValue();
+                if (logWords.containsAll(queryWords)) {
+                    result.add(queryId);
                 }
             }
+
             if (result.isEmpty()) {
                 System.out.println("Log");
             } else {
