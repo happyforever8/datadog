@@ -118,3 +118,47 @@ public class Main {
         }
     }
 }
+
+Counter for entry 'Q: hello world': {hello=1, world=1}
+Registered q1
+Current queriesDict: {hello1world1=1}
+Current revertedIdx: {hello=[1], world=[1]}
+
+Counter for entry 'Q: data failure': {data=1, failure=1}
+Registered q2
+Current queriesDict: {hello1world1=1, data1failure1=2}
+Current revertedIdx: {hello=[1], world=[1], data=[2], failure=[2]}
+
+Counter for entry 'Q: world hello': {world=1, hello=1}
+Registered q1
+Current queriesDict: {hello1world1=1, data1failure1=2}
+Current revertedIdx: {hello=[1], world=[1], data=[2], failure=[2]}
+
+Counter for entry 'Q: world hello hello': {world=1, hello=2}
+Registered q3
+Current queriesDict: {hello1world1=1, data1failure1=2, hello2world1=3}
+Current revertedIdx: {hello=[1, 3], world=[1, 3], data=[2], failure=[2]}
+
+Counter for entry 'L: hello world we have a data failure hello': {hello=2, world=1, we=1, have=1, a=1, data=1, failure=1}
+Current queries: {1={hello=1, world=1}, 2={data=1, failure=1}, 3={hello=2, world=1}}
+Log q1 q2 q3 
+Current queriesDict: {hello1world1=1, data1failure1=2, hello2world1=3}
+Current revertedIdx: {hello=[1, 3], world=[1, 3], data=[2], failure=[2]}
+
+Counter for entry 'L: oh no system error': {oh=1, no=1, system=1, error=1}
+Current queries: {}
+Log
+Current queriesDict: {hello1world1=1, data1failure1=2, hello2world1=3}
+Current revertedIdx: {hello=[1, 3], world=[1, 3], data=[2], failure=[2]}
+
+Counter for entry 'Q: system error': {system=1, error=1}
+Registered q4
+Current queriesDict: {hello1world1=1, data1failure1=2, hello2world1=3, system1error1=4}
+Current revertedIdx: {hello=[1, 3], world=[1, 3], data=[2], failure=[2], system=[4], error=[4]}
+
+Counter for entry 'L: oh no system error again': {oh=1, no=1, system=1, error=1, again=1}
+Current queries: {4={system=1, error=1}}
+Log q4 
+Current queriesDict: {hello1world1=1, data1failure1=2, hello2world1=3, system1error1=4}
+Current revertedIdx: {hello=[1, 3], world=[1, 3], data=[2], failure=[2], system=[4], error=[4]}
+
