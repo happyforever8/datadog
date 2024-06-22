@@ -36,129 +36,166 @@ Output would be:
 1. query 里面的单词顺序不管，只要有一样的set of words就算是一样的query。但是单词出现次数要管，比如"hello world world"跟"hello hello world"是两个不一样的query。
 2. log里面也是顺序不管，但是单词出现次数要一致。
 
+数据结构设计:
+
+（1）使用 queriesDict 存储已注册的查询，每个查询由其单词计数的哈希值作为键，查询 ID 作为值。
+使用 revertedIdx 作为倒排索引，存储每个单词对应的查询 ID 列表，以便快速找到包含该单词的查询。
+哈希值生成:
+
+（2）对每个查询，计算其单词计数并生成哈希值，确保顺序一致性（例如，按字典序排序单词）。
+处理查询（Q）:
+
+（3）如果查询的哈希值已存在于 queriesDict 中，说明该查询已注册，输出相应的查询 ID。
+如果查询的哈希值不存在，将其添加到 queriesDict 和 revertedIdx 中，并分配一个新的查询 ID。
+处理日志（L）:
+
+（4）遍历日志中的每个单词，从 revertedIdx 中找到包含该单词的查询 ID。
+收集这些查询 ID 及其对应的单词和计数，存储在临时的 queries 中。
+最后，通过比较 queries 中的单词计数与 queriesDict 中的哈希值，找到完全匹配的查询 ID，并输出这些查询 ID。
 
 
+import java.util.*;
 
- import java.util.*;
+public class LogsAndQueries {
+    private Map<String, Integer> queriesDict;
+    private Map<String, List<Integer>> revertedIdx;
+    private int id;
 
-public class Main {
-    private static Map<String, Integer> queriesDict;
-    private static Map<Integer, Set<String>> queriesWords;
-    private static int id;
-
-    public static void main(String[] args) {
+    public LogsAndQueries() {
         queriesDict = new HashMap<>();
-        queriesWords = new HashMap<>();
+        revertedIdx = new HashMap<>();
         id = 1;
-
-        input("Q: hello world");
-        input("Q: data failure");
-        input("Q: world hello");
-        input("Q: world world hello");
-        input("L: hello world world hello we have a data failure");
-        input("L: oh no system error");
-        input("Q: system error");
-        input("L: oh no system error again");
     }
 
-    public static String getHashFromCounters(Map<String, Integer> counter) {
+    private String getHashFromCounters(Map<String, Integer> counter) {
+        List<String> res = new ArrayList<>();
         List<String> keys = new ArrayList<>(counter.keySet());
         Collections.sort(keys);
-        StringBuilder sb = new StringBuilder();
         for (String w : keys) {
-            sb.append(w);
-            sb.append(counter.get(w));
+            res.add(w);
+            res.add(String.valueOf(counter.get(w)));
         }
-        return sb.toString();
+        return String.join("", res);
     }
 
-    public static void input(String entry) {
+    public void input(String entry) {
         String[] parts = entry.split(":");
         String tp = parts[0].trim();
         String content = parts[1].trim();
         String[] words = content.split(" ");
+        Map<String, Integer> counter = new HashMap<>();
+        for (String word : words) {
+            counter.put(word, counter.getOrDefault(word, 0) + 1);
+        }
 
         if (tp.equals("Q")) {
-            Map<String, Integer> counter = new HashMap<>();
-            Set<String> wordSet = new HashSet<>();
-            for (String word : words) {
-                counter.put(word, counter.getOrDefault(word, 0) + 1);
-                wordSet.add(word);
-            }
-            String hash = getHashFromCounters(counter);
-            if (!queriesDict.containsKey(hash)) {
-                queriesDict.put(hash, id);
-                queriesWords.put(id, wordSet);
-                System.out.println("Registered q" + id);
-                id++;
-            } else {
-                System.out.println("Registered q" + queriesDict.get(hash));
-            }
-        } else if (tp.equals("L")) {
-            Set<String> logWords = new HashSet<>(Arrays.asList(words));
-            List<Integer> result = new ArrayList<>();
+            handleQuery(counter);
+        } else {
+            handleLog(counter, words);
+        }
+    }
 
-            for (Map.Entry<Integer, Set<String>> entrySet : queriesWords.entrySet()) {
-                int queryId = entrySet.getKey();
-                Set<String> queryWords = entrySet.getValue();
-                if (logWords.containsAll(queryWords)) {
-                    result.add(queryId);
+    private void handleQuery(Map<String, Integer> counter) {
+        String hash = getHashFromCounters(counter);
+        if (!queriesDict.containsKey(hash)) {
+            queriesDict.put(hash, id);
+            for (String word : counter.keySet()) {
+                revertedIdx.computeIfAbsent(word, k -> new ArrayList<>()).add(id);
+            }
+            System.out.println("Registered q" + id);
+            id++;
+        } else {
+            System.out.println("Registered q" + queriesDict.get(hash));
+        }
+        System.out.println("queriesDict: " + queriesDict);
+        System.out.println("revertedIdx: " + revertedIdx);
+    }
+
+    private void handleLog(Map<String, Integer> counter, String[] words) {
+        List<Integer> result = new ArrayList<>();
+       //queries 是用来临时存储每个查询与当前日志中匹配的单词及其出现次数
+        Map<Integer, Map<String, Integer>> queries = new HashMap<>();
+        for (String word : words) {
+            if (revertedIdx.containsKey(word)) {
+                for (int q : revertedIdx.get(word)) {
+                    queries.computeIfAbsent(q, k -> new HashMap<>())
+                           .put(word, queries.get(q).getOrDefault(word, 0) + 1);
                 }
             }
+            // 打印每个单词处理后的 queries
+            System.out.println("After processing word '" + word + "': " + queries);
+        }
 
-            if (result.isEmpty()) {
-                System.out.println("Log");
-            } else {
-                StringBuilder logResult = new StringBuilder("Log");
-                for (int q : result) {
-                    logResult.append(" q").append(q);
-                }
-                System.out.println(logResult.toString());
+        for (int cq : queries.keySet()) {
+            String chash = getHashFromCounters(queries.get(cq));
+            if (queriesDict.containsKey(chash) && queriesDict.get(chash) == cq) {
+                result.add(cq);
             }
+        }
+
+        if (result.isEmpty()) {
+            System.out.println("Log");
+        } else {
+            System.out.print("Log ");
+            for (int qid : result) {
+                System.out.print("q" + qid + " ");
+            }
+            System.out.println();
+        }
+
+        System.out.println("queriesDict: " + queriesDict);
+        System.out.println("revertedIdx: " + revertedIdx);
+        System.out.println("queries: " + queries);
+    }
+
+    public static void main(String[] args) {
+        String[] entries = {
+            "Q: hello world",
+            "Q: data failure",
+            "Q: world hello",
+            "Q: world hello hello",
+            "L: hello world we have a data failure hello",
+            "L: oh no system error",
+            "Q: system error",
+            "L: oh no system error again"
+        };
+
+        LogsAndQueries logsAndQueries = new LogsAndQueries();
+        for (String entry : entries) {
+            logsAndQueries.input(entry);
         }
     }
 }
-
-Counter for entry 'Q: hello world': {hello=1, world=1}
 Registered q1
-Current queriesDict: {hello1world1=1}
-Current revertedIdx: {hello=[1], world=[1]}
+queriesDict: {hello1world1=1}
+revertedIdx: {world=[1], hello=[1]}
 
-Counter for entry 'Q: data failure': {data=1, failure=1}
 Registered q2
-Current queriesDict: {hello1world1=1, data1failure1=2}
-Current revertedIdx: {hello=[1], world=[1], data=[2], failure=[2]}
+queriesDict: {hello1world1=1, data1failure1=2}
+revertedIdx: {world=[1], data=[2], failure=[2], hello=[1]}
 
-Counter for entry 'Q: world hello': {world=1, hello=1}
 Registered q1
-Current queriesDict: {hello1world1=1, data1failure1=2}
-Current revertedIdx: {hello=[1], world=[1], data=[2], failure=[2]}
+queriesDict: {hello1world1=1, data1failure1=2}
+revertedIdx: {world=[1], data=[2], failure=[2], hello=[1]}
 
-Counter for entry 'Q: world hello hello': {world=1, hello=2}
 Registered q3
-Current queriesDict: {hello1world1=1, data1failure1=2, hello2world1=3}
-Current revertedIdx: {hello=[1, 3], world=[1, 3], data=[2], failure=[2]}
+queriesDict: {hello2world1=3, hello1world1=1, data1failure1=2}
+revertedIdx: {world=[1, 3], data=[2], failure=[2], hello=[1, 3]}
+queries: {1={world=1, hello=2}, 2={data=1, failure=1}, 3={world=1, hello=2}}
 
-Counter for entry 'L: hello world we have a data failure hello': {hello=2, world=1, we=1, have=1, a=1, data=1, failure=1}
-Current queries: {1={hello=1, world=1}, 2={data=1, failure=1}, 3={hello=2, world=1}}
-Log q1 q2 q3 
-Current queriesDict: {hello1world1=1, data1failure1=2, hello2world1=3}
-Current revertedIdx: {hello=[1, 3], world=[1, 3], data=[2], failure=[2]}
-
-Counter for entry 'L: oh no system error': {oh=1, no=1, system=1, error=1}
-Current queries: {}
+Log q2 q3 
+queriesDict: {hello2world1=3, hello1world1=1, data1failure1=2}
+revertedIdx: {world=[1, 3], data=[2], failure=[2], hello=[1, 3]}
+queries: {}
 Log
-Current queriesDict: {hello1world1=1, data1failure1=2, hello2world1=3}
-Current revertedIdx: {hello=[1, 3], world=[1, 3], data=[2], failure=[2]}
-
-Counter for entry 'Q: system error': {system=1, error=1}
+queriesDict: {hello2world1=3, hello1world1=1, data1failure1=2}
+revertedIdx: {world=[1, 3], data=[2], failure=[2], hello=[1, 3]}
 Registered q4
-Current queriesDict: {hello1world1=1, data1failure1=2, hello2world1=3, system1error1=4}
-Current revertedIdx: {hello=[1, 3], world=[1, 3], data=[2], failure=[2], system=[4], error=[4]}
-
-Counter for entry 'L: oh no system error again': {oh=1, no=1, system=1, error=1, again=1}
-Current queries: {4={system=1, error=1}}
+queriesDict: {hello2world1=3, hello1world1=1, data1failure1=2, error1system1=4}
+revertedIdx: {system=[4], world=[1, 3], data=[2], failure=[2], hello=[1, 3], error=[4]}
+queries: {4={system=1, error=1}}
 Log q4 
-Current queriesDict: {hello1world1=1, data1failure1=2, hello2world1=3, system1error1=4}
-Current revertedIdx: {hello=[1, 3], world=[1, 3], data=[2], failure=[2], system=[4], error=[4]}
+queriesDict: {hello2world1=3, hello1world1=1, data1failure1=2, error1system1=4}
+revertedIdx: {system=[4], world=[1, 3], data=[2], failure=[2], hello=[1, 3], error=[4]}
 
+Process finished with exit code 0
