@@ -74,8 +74,8 @@ public class LogsAndQueries {
         List<String> res = new ArrayList<>();
         List<String> keys = new ArrayList<>(counter.keySet());
         Collections.sort(keys);
-        for (String w : keys) {
-            res.add(w);
+        for (String key : keys) {
+            res.add(key);
             res.add(String.valueOf(counter.get(w)));
         }
         return String.join("", res);
@@ -121,9 +121,9 @@ public class LogsAndQueries {
         Map<Integer, Map<String, Integer>> queries = new HashMap<>();
         for (String word : words) {
             if (revertedIdx.containsKey(word)) {
-                for (int q : revertedIdx.get(word)) {
+                for (int qid : revertedIdx.get(word)) {
                     queries.computeIfAbsent(q, k -> new HashMap<>())
-                           .put(word, queries.get(q).getOrDefault(word, 0) + 1);
+                           .put(word, queries.get(qid).getOrDefault(word, 0) + 1);
                 }
             }
             // 打印每个单词处理后的 queries
@@ -131,7 +131,7 @@ public class LogsAndQueries {
         }
 
         for (int cq : queries.keySet()) {
-            String chash = (queries.get(cq));
+            String chash = getHash(queries.get(cq));
             if (queriesDict.containsKey(chash) && queriesDict.get(chash) == cq) {
                 result.add(cq);
             }
