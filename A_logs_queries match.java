@@ -57,6 +57,9 @@ Output would be:
 import java.util.*;
 
 public class LogsAndQueries {
+
+//     queriesDict: {hello1world1=1}
+//    revertedIdx: {world=[1], hello=[1]}
     private Map<String, Integer> queriesDict;
     private Map<String, List<Integer>> revertedIdx;
     private int id;
@@ -67,7 +70,7 @@ public class LogsAndQueries {
         id = 1;
     }
 
-    private String getHashFromCounters(Map<String, Integer> counter) {
+    private String getHash(Map<String, Integer> counter) {
         List<String> res = new ArrayList<>();
         List<String> keys = new ArrayList<>(counter.keySet());
         Collections.sort(keys);
@@ -80,7 +83,7 @@ public class LogsAndQueries {
 
     public void input(String entry) {
         String[] parts = entry.split(":");
-        String tp = parts[0].trim();
+        String type = parts[0].trim();
         String content = parts[1].trim();
         String[] words = content.split(" ");
         Map<String, Integer> counter = new HashMap<>();
@@ -88,7 +91,7 @@ public class LogsAndQueries {
             counter.put(word, counter.getOrDefault(word, 0) + 1);
         }
 
-        if (tp.equals("Q")) {
+        if (type.equals("Q")) {
             handleQuery(counter);
         } else {
             handleLog(counter, words);
@@ -96,7 +99,7 @@ public class LogsAndQueries {
     }
 
     private void handleQuery(Map<String, Integer> counter) {
-        String hash = getHashFromCounters(counter);
+        String hash = getHash(counter);
         if (!queriesDict.containsKey(hash)) {
             queriesDict.put(hash, id);
             for (String word : counter.keySet()) {
@@ -114,6 +117,7 @@ public class LogsAndQueries {
     private void handleLog(Map<String, Integer> counter, String[] words) {
         List<Integer> result = new ArrayList<>();
        //queries 是用来临时存储每个查询与当前日志中匹配的单词及其出现次数
+       // queries: {1={world=1, hello=2}, 2={data=1, failure=1}, 3={world=1, hello=2}}
         Map<Integer, Map<String, Integer>> queries = new HashMap<>();
         for (String word : words) {
             if (revertedIdx.containsKey(word)) {
@@ -127,7 +131,7 @@ public class LogsAndQueries {
         }
 
         for (int cq : queries.keySet()) {
-            String chash = getHashFromCounters(queries.get(cq));
+            String chash = (queries.get(cq));
             if (queriesDict.containsKey(chash) && queriesDict.get(chash) == cq) {
                 result.add(cq);
             }
