@@ -1,7 +1,11 @@
-https://www.1point3acres.com/bbs/thread-1065882-1-1.html
+(1)https://www.1point3acres.com/bbs/thread-1065882-1-1.html
 第二题： implement a buffered writer: 这个writer存在一个buffer 和可设置的最大buffer size，这里的buffer工作方式是
 1， 读取的数据先存在buffer里面不写入硬盘
 2， 当buffer里的数据量达到buffer size的时候，一次性清空所有buffer内的数据到硬盘中。如此往复。
+
+
+(2)coding 2: Given a File class, implement a bufferedfile to simulate file writer with buffer
+follow up: optimize buffer
 
   import java.util.ArrayList;
 import java.util.List;
