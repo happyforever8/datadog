@@ -1,3 +1,6 @@
+Coding 1: given a file system api, Implement a api to list, delete all files under given path.
+followup: how to reduce resource usage.
+
 import java.util.List;
 
 class FileSystem {
