@@ -19,7 +19,13 @@
     实际题里是metrics log，所以有一些分割符号需要处理，不仅是像之前面经里的逗号那么直接。总体思路还是inverted index没问题。
     high performance是因为stream 进来需要多次query，所以optimization for query，
     那么就需要preprocessing。inverted index是个套路，一般用token做key，可以搜搜相关文章。在这个题里token就是tag/关键词。
-    
+
+(4) 题目和过往面经一样。
+['apple, facebook, google', 'banana, facebook', 'facebook, google, tesla', 'intuit, google, facebook']
+然后有一个 filter list， 根据 filter list 输出这些 Tags 的补集
+比如 filter by ['apple']那么 return ['facebook', 'google'] (只有第一个里面有 APPLE）
+比如 filter by ['facebook', 'google']那么 return‍‍‍‌‍‍‍‍‍‍‌‌‍‍‍‌‌‍‍ ['apple', 'tesla','intuit']
+我是用hashmap 做Cache。 Follow up 是怎么更好的index 这个hashmap (Key 是啥，Value 是啥）。    
     
 
 There is a stream that has coming tags and also has a list of keywords, 
