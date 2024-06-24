@@ -1,3 +1,6 @@
+(1)第三轮，白人小哥，L+Q问题， 建inverted index就可以，有很多follow up，但只要一开始interface建好后面extend非常简单。小哥当即反馈是他见过最全面和整洁的代码
+
+
 // 设计一个queries search object，它每次读取一行信息string。当这个string格式是
 // "Q: hello world" 表示这是个queries， 内容是 hello world
 // 如果string 格式是 “L: hello morning world”那么表示这是个log， 内容是 hello morning world。 
