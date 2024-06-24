@@ -15,3 +15,8 @@
 
 (5)system design轮是设计mint.com
 
+(6) 第三轮SD,
+设计一个类似m‍‍‍‍‍‍‍‍‌‍‌‌‍‌‌‌‌‌int.com的系统，design an application which will collect and store purchases from credit 
+    and debit cards and provide the user with insight into their spending habits. 这轮讲的时候我觉得讲的挺好，
+    有具体讨论Database choice, schema, pw如何存etc.但最后给的反馈是这一轮fail了，
+    因为没有讲太多detailed design。我也是不大懂要detail到怎样。
