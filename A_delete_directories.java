@@ -10,6 +10,9 @@ isDir(string path‍‍‍‍‍‍‍‍‌‍‌‌‍‌‌‌‌‌): if pat
 解法： recursion
 follow up：what if you have out of memory issue?
 
+(3) coding第一轮是给3个function，问如何实现删除一个目录里所有文件的函数，
+    followup是如果oom了该怎么办，我给了一个方案以后再问如果这个方案还是oom了该怎么办，最后说了思路时间就差不多了
+
 
 import java.util.List;
 
