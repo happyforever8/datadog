@@ -13,3 +13,5 @@
 
 (4) System D: design a web crawler system, how to s‍‍‍‍‍‍‍‍‌‍‌‌‍‌‌‌‌‌cale, how to reduce resource usage.
 
+(5)system design轮是设计mint.com
+
