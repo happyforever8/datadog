@@ -30,3 +30,5 @@
 (8) 题目也是以往面经题目。让你设计一个flight ticket deals email notification system, 
     要求 1.不能发重复的deal 2.如果有新users加入且subscribe 了他想知道的目的地的deal, 之前发过的no‍‍‍‌‍‍‍‍‍‍‌‌‍‍‍‌‌‍‍tification也需要发给他
 我用的是message queue 做传送notifications, 用cache 做read heavy 的缓存。期间一直问如果十分钟内有10 billion deals 咋办 怎么存，要不你试试问你老板怎么去存。。。
+
+    最后，你可以和Recruiter schedule time 讨论feedback. 他家这点很好啊， 每轮过没过都跟你讲。 结果就是 system design 挂了，因为我的设计too heavy read/too heavy read。 和这个一样哈哈
