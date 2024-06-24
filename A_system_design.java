@@ -25,3 +25,8 @@
 一个director面得，第一个proj大概聊了半个小时，具体除了很多细节技术和我的职责，
     就是不经意间的bq常见问题： 组内组外协调，队员犯错或不同意见，
     遇到的困难，self motivation。后面时间不太够了有大概花了10min聊了聊其他的项目和我喜欢和讨厌现公司的点。
+
+
+(8) 题目也是以往面经题目。让你设计一个flight ticket deals email notification system, 
+    要求 1.不能发重复的deal 2.如果有新users加入且subscribe 了他想知道的目的地的deal, 之前发过的no‍‍‍‌‍‍‍‍‍‍‌‌‍‍‍‌‌‍‍tification也需要发给他
+我用的是message queue 做传送notifications, 用cache 做read heavy 的缓存。期间一直问如果十分钟内有10 billion deals 咋办 怎么存，要不你试试问你老板怎么去存。。。
