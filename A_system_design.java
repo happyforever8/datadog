@@ -20,3 +20,8 @@
     and debit cards and provide the user with insight into their spending habits. 这轮讲的时候我觉得讲的挺好，
     有具体讨论Database choice, schema, pw如何存etc.但最后给的反馈是这一轮fail了，
     因为没有讲太多detailed design。我也是不大懂要detail到怎样。
+
+(7) 第二轮bq：
+一个director面得，第一个proj大概聊了半个小时，具体除了很多细节技术和我的职责，
+    就是不经意间的bq常见问题： 组内组外协调，队员犯错或不同意见，
+    遇到的困难，self motivation。后面时间不太够了有大概花了10min聊了聊其他的项目和我喜欢和讨厌现公司的点。
