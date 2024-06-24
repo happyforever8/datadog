@@ -1,3 +1,6 @@
+(1) coding第二轮是面经里的high performance filter，followup是如果数据量很大的话该如何优‍‍‍‍‍‍‍‍‌‍‌‌‍‌‌‌‌‌化。
+
+    
 
 There is a stream that has coming tags and also has a list of keywords, 
 design a high performance filter to output these keywords remaining tags.
