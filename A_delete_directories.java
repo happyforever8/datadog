@@ -1,5 +1,15 @@
-Coding 1: given a file system api, Implement a api to list, delete all files under given path.
+(1)Coding 1: given a file system api, Implement a api to list, delete all files under given path.
 followup: how to reduce resource usage.
+
+(2)
+    给你一些文件的接口函数：
+FindList(string path): find all sub dir and files in current path
+Delete(string path): if file or empty dir, delete and return true.
+isDir(string path‍‍‍‍‍‍‍‍‌‍‌‌‍‌‌‌‌‌): if path is dir, return true
+然后实现rm -rf，删除path下所有内容
+解法： recursion
+follow up：what if you have out of memory issue?
+
 
 import java.util.List;
 
