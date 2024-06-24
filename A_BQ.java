@@ -6,3 +6,5 @@ HM behavior：
   后来面试官就一直追着问auth怎么做，我心想auth不都是用cookie吗，都是标准做法，还有啥深入探讨的，‍‍‍‍‍‍‍‍‌‍‌‌‍‌‌‌‌‌没想到面试的人就因为这个觉得我lead的不够，我也是醉了
 
   我讲了不同的project，presentation那轮更重要些，所以把好的project在那一轮说
+
+  experience轮详细问我之前的一个项目，让我画了这个项目的架构。
