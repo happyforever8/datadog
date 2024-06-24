@@ -11,3 +11,5 @@
 
 (3)design youtube，这个也聊感觉还好，最后面试官也不知道问什么了，就聊了聊他们组正在做的东西。但最后的feedback是我自己drive的不太够，让他们问了太多的问题
 
+(4) System D: design a web crawler system, how to s‍‍‍‍‍‍‍‍‌‍‌‌‍‌‌‌‌‌cale, how to reduce resource usage.
+
