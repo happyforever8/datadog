@@ -7,6 +7,15 @@
 (2)coding 2: Given a File class, implement a bufferedfile to simulate file writer with buffer
 follow up: optimize buffer
 
+
+(3) 给你一些文件的接口函数：
+write(const uint8_t* bytes, int nBytes)
+flush()
+然后实现BufferedFile类，要求模拟一个memory storage
+constructor： (File* f, int nMaxBufferedBytes)；nMaxBufferedBytes is memory size
+write(const uint8_t* bytes, int nBytes)： 优先写入memory，memory FIFO写入disk
+flush(): from mem to disk
+
   import java.util.ArrayList;
 import java.util.List;
 
