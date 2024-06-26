@@ -51,4 +51,34 @@ public class Main {
         }
         fs.delete(path);
     }
+
+    // iterative solution
+    public void DeleteAllFilesAndDir(String path) {
+        Stack<String> stack = new Stack<>();
+        stack.push(path);
+        
+        while (!stack.isEmpty()) {
+            String currentPath = stack.peek();
+            List<String> contents = findList(currentPath);
+            boolean isDirEmpty = true;
+            
+            for (String item : contents) {
+                if (isDir(item)) {
+                    stack.push(item);
+                    isDirEmpty = false;
+                } else {
+                    delete(item);
+                }
+            }
+            
+            // If the directory is empty or its contents have been deleted, remove it
+             // After processing the contents, if isDirEmpty is true (meaning the directory is either empty 
+             //     or all its contents have been deleted), pop the current path from the stack and delete the directory.
+            if (isDirEmpty) {
+                stack.pop();
+                delete(currentPath);
+            }
+        }
+    }
+    
 }
