@@ -101,40 +101,48 @@ public class HighPerformanceFilter {
 
 
 //   second way
-public class DatadogInvertedIndex {
+import java.util.*;
+import java.util.stream.Collectors;
 
-    Map<String, Set<Set<String>>> invertedIndex = new HashMap<>();
+public class BetterDatadogInvertedIndex {
+
+    Map<String, Set<String>> invertedIndex = new HashMap<>();
 
     public void pushTags(List<String> tags) {
         Set<String> tagsSet = new HashSet<>(tags);
         for (String tag : tagsSet) {
-            Set<Set<String>> targetDocuments = invertedIndex.getOrDefault(tag, new HashSet<>());
-            targetDocuments.add(tagsSet);
+            Set<String> targetDocuments = invertedIndex.getOrDefault(tag, new HashSet<>());
+            targetDocuments.addAll(tagsSet); // Union of current tag set and new tagsSet
             invertedIndex.put(tag, targetDocuments);
         }
     }
 
     public Set<String> searchTags(List<String> tags) {
-        Set<String> allFoundTags = searchTag(tags.get(0)).stream()
-                .filter(s -> s.containsAll(tags))
-                .flatMap(Collection::stream)
-                .collect(Collectors.toSet());
-        tags.forEach(allFoundTags::remove);
+        Set<String> allFoundTags = new HashSet<>();
+
+        for (String tag : tags) {
+            Set<String> tagDocuments = invertedIndex.getOrDefault(tag, new HashSet<>());
+            if (allFoundTags.isEmpty()) {
+                allFoundTags.addAll(tagDocuments);
+            } else {
+                allFoundTags.retainAll(tagDocuments); // Intersection with existing results
+            }
+        }
+
         return allFoundTags;
     }
 
-    private Set<Set<String>> searchTag(String tag) {
-        return invertedIndex.getOrDefault(tag, new HashSet<>());
-    }
-
     public static void main(String[] args) {
-        DatadogInvertedIndex s = new DatadogInvertedIndex();
-        s.pushTags(List.of("apple","google", "facebook"));
-        s.pushTags(List.of("banana","facebook"));
+        BetterDatadogInvertedIndex s = new BetterDatadogInvertedIndex();
+        s.pushTags(List.of("apple", "google", "facebook"));
+        s.pushTags(List.of("banana", "facebook"));
         s.pushTags(List.of("facebook", "google", "tesla"));
         s.pushTags(List.of("intuit", "google", "facebook"));
 
         Set<String> res1 = s.searchTags(List.of("apple"));
         Set<String> res2 = s.searchTags(List.of("facebook", "google"));
+
+        System.out.println("Search result for 'apple': " + res1);
+        System.out.println("Search result for 'facebook' and 'google': " + res2);
     }
 }
