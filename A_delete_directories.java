@@ -82,3 +82,143 @@ public class Main {
     }
     
 }
+
+OOM 怎么办
+方案一：限制栈的深度
+我们可以限制一次处理的目录深度来控制内存消耗。当栈达到一定深度时，将当前状态保存到外部存储中，继续处理下一个部分
+
+    import java.util.Stack;
+import java.util.List;
+import java.util.ArrayList;
+
+public class FileDeleter {
+
+    void SaveState(Stack<String> stack) {
+        // Save the state to an external storage (e.g., a file or database)
+    }
+
+    Stack<String> LoadState() {
+        // Load the state from external storage
+        return new Stack<>();
+    }
+
+    public void DeleteAllFilesAndDir(String path) {
+        Stack<String> stack = new Stack<>();
+        stack.push(path);
+
+        List<String> dirsToDelete = new ArrayList<>();
+        int maxDepth = 100; // Adjust based on memory capacity
+
+        while (!stack.isEmpty()) {
+            if (stack.size() > maxDepth) {
+                SaveState(stack);
+                stack = LoadState();
+                continue;
+            }
+
+            String currentPath = stack.peek();
+            List<String> contents = FindList(currentPath);
+            boolean isDirEmpty = true;
+
+            for (String item : contents) {
+                if (isDir(item)) {
+                    stack.push(item);
+                    isDirEmpty = false;
+                } else {
+                    Delete(item);
+                }
+            }
+
+            if (isDirEmpty) {
+                stack.pop();
+                Delete(currentPath);
+            }
+        }
+
+        for (int i = dirsToDelete.size() - 1; i >= 0; i--) {
+            Delete(dirsToDelete.get(i));
+        }
+        Delete(path);
+    }
+
+    public static void main(String[] args) {
+        FileDeleter deleter = new FileDeleter();
+        String path = "your_directory_path";
+        deleter.DeleteAllFilesAndDir(path);
+    }
+}
+
+
+===========================================
+    方案二：分批处理栈
+我们可以分批处理栈中的元素，逐步处理每一批来避免一次性加载太多数据。
+    import java.util.Stack;
+import java.util.List;
+import java.util.ArrayList;
+
+public class FileDeleter {
+
+    void SaveState(Stack<String> stack) {
+        // Save the state to an external storage (e.g., a file or database)
+    }
+
+    Stack<String> LoadState() {
+        // Load the state from external storage
+        return new Stack<>();
+    }
+
+    public void DeleteAllFilesAndDir(String path) {
+        Stack<String> stack = new Stack<>();
+        stack.push(path);
+
+        List<String> dirsToDelete = new ArrayList<>();
+        int batchSize = 100; // Adjust the batch size based on memory capacity
+
+        while (!stack.isEmpty()) {
+            Stack<String> tempStack = new Stack<>();
+
+            while (!stack.isEmpty() && tempStack.size() < batchSize) {
+                tempStack.push(stack.pop());
+            }
+
+            while (!tempStack.isEmpty()) {
+                String currentPath = tempStack.peek();
+                List<String> contents = FindList(currentPath);
+                boolean isDirEmpty = true;
+
+                for (String item : contents) {
+                    if (isDir(item)) {
+                        stack.push(item);
+                        dirsToDelete.add(item);
+                        isDirEmpty = false;
+                    } else {
+                        Delete(item);
+                    }
+                }
+
+                if (isDirEmpty) {
+                    tempStack.pop();
+                    Delete(currentPath);
+                }
+            }
+
+            if (!stack.isEmpty()) {
+                SaveState(stack);
+                stack.clear();
+                stack.addAll(LoadState());
+            }
+        }
+
+        for (int i = dirsToDelete.size() - 1; i >= 0; i--) {
+            Delete(dirsToDelete.get(i));
+        }
+        Delete(path);
+    }
+
+    public static void main(String[] args) {
+        FileDeleter deleter = new FileDeleter();
+        String path = "your_directory_path";
+        deleter.DeleteAllFilesAndDir(path);
+    }
+}
+
