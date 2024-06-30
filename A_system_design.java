@@ -15,6 +15,12 @@
 
 (5)system design轮是设计mint.com
 
+(5.1) 要求设计一个系统可以通过用户的银行消费记录分析出用户在某类消费的数量和价值等信息。
+    一开始搞错重点了想着要考设计payment这些，结果说到一半面试官建议就把我们当做一个3rd party就好具体payment部分不用关心，
+    主要是分类整合用户信息……讨论metric设计， api/MQ， 
+    db（我自己的设计是单独一个db存每一条action的log，但感觉这个应该是不需要的），
+    如何监控这个系统正常运行（我当时有点慌只想到了heartbeat，zookeeper欢迎大家补充）
+
 (6) 第三轮SD,
 设计一个类似m‍‍‍‍‍‍‍‍‌‍‌‌‍‌‌‌‌‌int.com的系统，design an application which will collect and store purchases from credit 
     and debit cards and provide the user with insight into their spending habits. 这轮讲的时候我觉得讲的挺好，
@@ -29,6 +35,11 @@
 
 (8) 题目也是以往面经题目。让你设计一个flight ticket deals email notification system, 
     要求 1.不能发重复的deal 2.如果有新users加入且subscribe 了他想知道的目的地的deal, 之前发过的no‍‍‍‌‍‍‍‍‍‍‌‌‍‍‍‌‌‍‍tification也需要发给他
-我用的是message queue 做传送notifications, 用cache 做read heavy 的缓存。期间一直问如果十分钟内有10 billion deals 咋办 怎么存，要不你试试问你老板怎么去存。。。
+我用的是message queue 做传送notifications, 用cache 做read heavy 的缓存。
+    期间一直问如果十分钟内有10 billion deals 咋办 怎么存，要不你试试问你老板怎么去存。。。
 
-    最后，你可以和Recruiter schedule time 讨论feedback. 他家这点很好啊， 每轮过没过都跟你讲。 结果就是 system design 挂了，因为我的设计too heavy read/too heavy read。 和这个一样哈哈
+    最后，你可以和Recruiter schedule time 讨论feedback. 他家这点很好啊， 
+    每轮过没过都跟你讲。 结果就是 system design 挂了，因为我的设计too heavy read/too heavy read。 和这个一样哈哈
+
+
+    4轮是system design，低价机票通知系统
