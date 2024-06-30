@@ -43,3 +43,21 @@
 
 
     4轮是system design，低价机票通知系统
+
+    1. 系统设计：Flight Ticket Discount Notification system，要多确认需求，
+    能简化不少设计。不能发重复的deal，只发邮件notificiation。不用考虑多个航程转机的细节，
+    也不用考虑discount怎么来的，有一个推荐系统直接给定discount。大家一定注意时间，把重要模块讲清楚。
+
+    系统设计那块有啥注意的点嘛？
+我能想到的就是要用db记录发过的status，以避免重复，还有别的点嘛
+    Notification本身要用到message queue，加cache避免high QPS to external flight API，
+    要考虑flight价格变化速度等等。很多dive deep的点。
+
+(9) ：设计一个图片匹配检测和通知系统，重点在如何设计通知部分
+
+
+
+
+
+
+    
