@@ -20,6 +20,13 @@
     主要是分类整合用户信息……讨论metric设计， api/MQ， 
     db（我自己的设计是单独一个db存每一条action的log，但感觉这个应该是不需要的），
     如何监控这个系统正常运行（我当时有点慌只想到了heartbeat，zookeeper欢迎大家补充）
+(5.2)
+    设计一个financial tracking system，类似mint，之前好几个面经里都提到过。
+功能比较简单，只需要用户可以连结银行账户，然后显示自己的开销，不需要分类，不需要制定预算，
+    不需要notification，面试官只让我focus在基本功能。很基本的distributed system，
+    用message queue和worker在连接银行账户和获取数据的时候做aysn，
+    设计database schema，用SQL和cache，怎么scale，怎么shard，
+    系统什么时候refresh数据‍‍‍‍‍‍‍‍‌‍‌‌‍‌‌‌‌‌，user authentication怎么做，如何使用authentication token和refresh token。
 
 (6) 第三轮SD,
 设计一个类似m‍‍‍‍‍‍‍‍‌‍‌‌‍‌‌‌‌‌int.com的系统，design an application which will collect and store purchases from credit 
@@ -52,6 +59,25 @@
 我能想到的就是要用db记录发过的status，以避免重复，还有别的点嘛
     Notification本身要用到message queue，加cache避免high QPS to external flight API，
     要考虑flight价格变化速度等等。很多dive deep的点。
+
+
+    题目也是以往面经题目。让你设计一个flight ticket deals email notification system, 
+    要求 1.不能发重复的deal 2.如果有新users加入且subscribe 了他想知道的目的地的deal, 
+    之前发过的no‍‍‍‌‍‍‍‍‍‍‌‌‍‍‍‌‌‍‍tification也需要发给他
+我用的是message queue 做传送notifications, 用cache 做read heavy 的缓存。
+    期间一直问如果十分钟内有10 billion deals 咋办 怎么存，要不你试试问你老板怎么去存。。。
+
+    10 billion deals or 10 billion notifications?
+Forget about 10 billion deals b/c it bombards users.
+Assume 10 billion notifications in 10 minutes with 10 billion users.
+First of all, it'll crash external systems, include email/SMS servers. Therefore, the system must 
+    (a) batch processes (b) spread out notifications into days. 
+    (Hours might not be feasible.) (c) multiple external email/SMS servers.
+Well, maybe also forget it. If it works, it's more like a DDOS.
+    It must be the center of hatred b/c it creates too much junk emails 
+    and crash/saturate external systems. Most likely the system will be blocked permanently.
+
+    系统设计是设计打折机票通知，蛮多non functional的要求，感觉能讲完就很不容易的，有被问到数据库的设计。
 
 (9) ：设计一个图片匹配检测和通知系统，重点在如何设计通知部分
 
