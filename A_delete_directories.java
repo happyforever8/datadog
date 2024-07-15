@@ -222,3 +222,59 @@ public class FileDeleter {
     }
 }
 
+
+
+=========================================
+    import java.io.IOException;
+import java.nio.file.*;
+import java.util.ArrayList;
+import java.util.List;
+
+class FileSystem {
+
+    public FileSystem() {
+    }
+
+    public List<String> findList(String path) {
+        List<String> fileList = new ArrayList<>();
+        try (DirectoryStream<Path> stream = Files.newDirectoryStream(Paths.get(path))) {
+            for (Path entry : stream) {
+                fileList.add(entry.toString());
+            }
+        } catch (IOException | DirectoryIteratorException e) {
+            System.err.println(e);
+        }
+        return fileList;
+    }
+
+    public boolean delete(String path) {
+        if (isDir(path)) {
+            List<String> children = findList(path);
+            if (children.isEmpty()) {
+                try {
+                    Files.delete(Paths.get(path));
+                    System.out.println("Deleting empty directory: " + path);
+                    return true;
+                } catch (IOException e) {
+                    System.err.println("Failed to delete directory: " + e.getMessage());
+                    return false;
+                }
+            } else {
+                System.out.println("Directory not empty: " + path);
+                return false;
+            }
+        } else {
+            try {
+                Files.delete(Paths.get(path));
+                System.out.println("Deleting file: " + path);
+                return true;
+            } catch (IOException e) {
+                System.err.println("Failed to delete file: " + e.getMessage());
+                return false;
+            }
+        }
+    }
+
+    public boolean isDir(String path) {
+        return Files.isDirectory(Paths.get(path));
+    }
