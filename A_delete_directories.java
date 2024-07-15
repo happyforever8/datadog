@@ -42,6 +42,11 @@ public class Main {
         deleteDirs("your/path/here", fs);
     }
 
+    //The overall time complexity is O(n), 
+    //where n is the total number of files and directories in the given path and all its subdirectories.
+
+    //The overall space complexity is O(d), where d is the maximum depth of the directory tree.
+
     public static void deleteDirs(String path, FileSystem fs) {
         if (fs.isDir(path)) {
             List<String> children = fs.findList(path);
@@ -52,6 +57,7 @@ public class Main {
         fs.delete(path);
     }
 
+    // time and space is same as above
     // iterative solution
     public void DeleteAllFilesAndDir(String path) {
         Stack<String> stack = new Stack<>();
