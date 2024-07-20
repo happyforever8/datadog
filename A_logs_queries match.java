@@ -39,30 +39,17 @@ Output would be:
 1. query 里面的单词顺序不管，只要有一样的set of words就算是一样的query。但是单词出现次数要管，比如"hello world world"跟"hello hello world"是两个不一样的query。
 2. log里面也是顺序不管，但是单词出现次数要一致。
 
-数据结构设计:
 
-（1）使用 queriesDict 存储已注册的查询，每个查询由其单词计数的哈希值作为键，查询 ID 作为值。
-使用 revertedIdx 作为倒排索引，存储每个单词对应的查询 ID 列表，以便快速找到包含该单词的查询。
-哈希值生成:
-
-（2）对每个查询，计算其单词计数并生成哈希值，确保顺序一致性（例如，按字典序排序单词）。
-处理查询（Q）:
-
-（3）如果查询的哈希值已存在于 queriesDict 中，说明该查询已注册，输出相应的查询 ID。
-如果查询的哈希值不存在，将其添加到 queriesDict 和 revertedIdx 中，并分配一个新的查询 ID。
-处理日志（L）:
-
-（4）遍历日志中的每个单词，从 revertedIdx 中找到包含该单词的查询 ID。
-收集这些查询 ID 及其对应的单词和计数，存储在临时的 queries 中。
-最后，通过比较 queries 中的单词计数与 queriesDict 中的哈希值，找到完全匹配的查询 ID，并输出这些查询 ID。
-
+package Tests;
 
 import java.util.*;
 
 public class LogsAndQueries {
+// Data Structures:
+// queriesDict: A Map that stores each query's unique hash and its corresponding query ID.
+// revertedIdx: A Map that stores each word and the list of query IDs it appears in.
+// id: An integer used to assign a unique ID to each new query.
 
-//     queriesDict: {hello1world1=1}
-//    revertedIdx: {world=[1], hello=[1]}
     private Map<String, Integer> queriesDict;
     private Map<String, List<Integer>> revertedIdx;
     private int id;
@@ -79,7 +66,7 @@ public class LogsAndQueries {
         Collections.sort(keys);
         for (String key : keys) {
             res.add(key);
-            res.add(String.valueOf(counter.get(w)));
+            res.add(String.valueOf(counter.get(key)));
         }
         return String.join("", res);
     }
@@ -113,24 +100,21 @@ public class LogsAndQueries {
         } else {
             System.out.println("Registered q" + queriesDict.get(hash));
         }
-        System.out.println("queriesDict: " + queriesDict);
-        System.out.println("revertedIdx: " + revertedIdx);
     }
 
     private void handleLog(Map<String, Integer> counter, String[] words) {
         List<Integer> result = new ArrayList<>();
-       //queries 是用来临时存储每个查询与当前日志中匹配的单词及其出现次数
-       // queries: {1={world=1, hello=2}, 2={data=1, failure=1}, 3={world=1, hello=2}}
+        // It creates a temporary Map called queries to store each query and the words it matches in the current log. 
+        //     It then generates a hash for each query in the log and checks
+        //     if it matches any existing queries in queriesDict. If there are matches, it prints the corresponding query IDs.
         Map<Integer, Map<String, Integer>> queries = new HashMap<>();
         for (String word : words) {
             if (revertedIdx.containsKey(word)) {
                 for (int qid : revertedIdx.get(word)) {
-                    queries.computeIfAbsent(q, k -> new HashMap<>())
-                           .put(word, queries.get(qid).getOrDefault(word, 0) + 1);
+                    queries.computeIfAbsent(qid, k -> new HashMap<>())
+                            .put(word, queries.get(qid).getOrDefault(word, 0) + 1);
                 }
             }
-            // 打印每个单词处理后的 queries
-            System.out.println("After processing word '" + word + "': " + queries);
         }
 
         for (int cq : queries.keySet()) {
@@ -149,22 +133,20 @@ public class LogsAndQueries {
             }
             System.out.println();
         }
-
-        System.out.println("queriesDict: " + queriesDict);
+                System.out.println("queriesDict: " + queriesDict);
         System.out.println("revertedIdx: " + revertedIdx);
         System.out.println("queries: " + queries);
     }
 
     public static void main(String[] args) {
         String[] entries = {
-            "Q: hello world",
-            "Q: data failure",
-            "Q: world hello",
-            "Q: world hello hello",
-            "L: hello world we have a data failure hello",
-            "L: oh no system error",
-            "Q: system error",
-            "L: oh no system error again"
+                "Q: hello world",
+                "Q: data failure",
+                "Q: world hello",
+                "L: hello world we have a data failure",
+                "L: oh no system error",
+                "Q: system error",
+                "L: oh no system error again"
         };
 
         LogsAndQueries logsAndQueries = new LogsAndQueries();
@@ -173,34 +155,20 @@ public class LogsAndQueries {
         }
     }
 }
-Registered q1
-queriesDict: {hello1world1=1}
-revertedIdx: {world=[1], hello=[1]}
 
+Registered q1
 Registered q2
-queriesDict: {hello1world1=1, data1failure1=2}
-revertedIdx: {world=[1], data=[2], failure=[2], hello=[1]}
-
 Registered q1
+Log q1 q2 
 queriesDict: {hello1world1=1, data1failure1=2}
 revertedIdx: {world=[1], data=[2], failure=[2], hello=[1]}
-
-
-queries: {1={world=1, hello=2}, 2={data=1, failure=1}}
-Log q2 
-queriesDict: {hello1world1=1, data1failure1=2}
-revertedIdx: {world=[1], data=[2], failure=[2], hello=[1]}
-
-queries: {}
+queries: {1={world=1, hello=1}, 2={data=1, failure=1}}
 Log
 queriesDict: {hello1world1=1, data1failure1=2}
 revertedIdx: {world=[1], data=[2], failure=[2], hello=[1]}
-
+queries: {}
 Registered q3
-queriesDict: {hello1world1=1, data1failure1=2, error1system1=3}
-revertedIdx: {system=[3], world=[1], data=[2], failure=[2], hello=[1], error=[3]}
-
-queries: {3={system=1, error=1}}
 Log q3 
 queriesDict: {hello1world1=1, data1failure1=2, error1system1=3}
 revertedIdx: {system=[3], world=[1], data=[2], failure=[2], hello=[1], error=[3]}
+queries: {3={system=1, error=1}}
