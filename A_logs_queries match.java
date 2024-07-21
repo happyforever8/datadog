@@ -258,4 +258,25 @@ public class LogsAndQueries2 {
     }
 }
 
+receive query 1
+receive query 2
+receive query 1
+receive query 1
+receive log and the relevant queries are [1, 2]
+queriesDict: {[hello, world]=1, [data, failure]=2}
+revertedIdx: {world=[1], data=[2], failure=[2], hello=[1]}
+queries: {1=[hello, world], 2=[data, failure]}
+==========================
+receive log and the relevant queries are []
+queriesDict: {[hello, world]=1, [data, failure]=2}
+revertedIdx: {world=[1], data=[2], failure=[2], hello=[1]}
+queries: {}
+==========================
+receive query 3
+receive log and the relevant queries are [3]
+queriesDict: {[error, system]=3, [hello, world]=1, [data, failure]=2}
+revertedIdx: {system=[3], world=[1], data=[2], failure=[2], hello=[1], error=[3]}
+queries: {3=[error, system]}
+==========================
+
     
