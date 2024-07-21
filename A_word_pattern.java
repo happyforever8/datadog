@@ -17,38 +17,43 @@ isMatch("3", "aaa") => true
 isMatch("3", "aa") => false
 
 
-  package Tests;
+ package Tests;
 
 public class WorldPattern {
 
-    public static boolean isMatch(String word, String pattern){
+
+    public static boolean singleDigitalMatch(String word, String pattern) {
+        int wIndex = 0, pIndex = 0;
+
+        while (wIndex < word.length() && pIndex < pattern.length()) {
+            char pChar = pattern.charAt(pIndex);
+
+            if (Character.isDigit(pChar)) {
+                int num = pChar - '0';
+                wIndex += num;
+                if (wIndex > word.length()) {
+                    return false;
+                }
+                pIndex++;
+
+            } else {
+                if (word.charAt(wIndex) != pChar){
+                    return false;
+                }
+            }
+            wIndex++;
+            pIndex++;
+        }
+        return wIndex == word.length() && pIndex == pattern.length();
+    }
+
+    public static boolean multipleDigitalMatch(String word, String pattern){
         int wIndex = 0, pIndex = 0;
 
         while (wIndex < word.length() && pIndex < pattern.length()){
             char pChar = pattern.charAt(pIndex);
 
-            if (pChar == '\\') {
-                // Handle escaped characters
-                pIndex++;
-                if (pIndex >= pattern.length()) {
-                    return false; // Invalid escape at end of pattern
-                }
-                pChar = pattern.charAt(pIndex);
-                if (pChar != word.charAt(wIndex)) {
-                    return false; // Mismatch after escaping
-                }
-                wIndex++;
-                pIndex++;
-            } else if (Character.isDigit(pChar)){
-                // handle single
-//                int num = pChar - '0';
-//                wIndex += num;
-//                if (wIndex > word.length()){
-//                    return false;
-//                }
-//                pIndex++;
-
-                // Handle multiple digit pattern
+             if (Character.isDigit(pChar)){
                 int numStart = pIndex;
                 while (pIndex < pattern.length() && Character.isDigit(pattern.charAt(pIndex))) {
                     pIndex++;
@@ -70,29 +75,65 @@ public class WorldPattern {
 
     }
 
+    public static boolean escapeMatch(String word, String pattern){
+        int wIndex = 0, pIndex = 0;
+
+        while (wIndex < word.length() && pIndex < pattern.length()){
+            char pChar = pattern.charAt(pIndex);
+
+            if (pChar == '\\') {
+                // Handle escaped characters
+                pIndex++;
+                if (pIndex >= pattern.length()) {
+                    return false; // Invalid escape at end of pattern
+                }
+                pChar = pattern.charAt(pIndex);
+                if (pChar != word.charAt(wIndex)) {
+                    return false; // Mismatch after escaping
+                }
+            } else if (Character.isDigit(pChar)){
+                // handle single
+                int num = pChar - '0';
+                wIndex += num;
+                if (wIndex > word.length()){
+                    return false;
+                }
+                pIndex++;
+            } else {
+                if (word.charAt(wIndex) != pChar){
+                    return false;
+                }
+            }
+            wIndex++;
+            pIndex++;
+        }
+        return wIndex == word.length() && pIndex == pattern.length();
+
+    }
+
     public static void main(String[] args) {
         String word1 = "datadog";
         String pattern1 = "d3dog";
-        System.out.println(isMatch(word1, pattern1)); // true
+        System.out.println(singleDigitalMatch(word1, pattern1)); // true
 
         String word2 = "accessibility";
         String pattern2 = "a11y";
-        System.out.println(isMatch(word2, pattern2)); // true
+        System.out.println(multipleDigitalMatch(word2, pattern2)); // true
 
         String word3 = "datadog";
         String pattern3 = "d\\3dog";
-        System.out.println(isMatch(word3, pattern3)); // false
+        System.out.println(escapeMatch(word3, pattern3)); // false
 
         String word4 = "d3dog";
         String pattern4 = "d\\3dog";
-        System.out.println(isMatch(word4, pattern4)); // true
+        System.out.println(escapeMatch(word4, pattern4)); // true
 
         String word5 = "example";
         String pattern5 = "e\\5e";
-        System.out.println(isMatch(word5, pattern5)); // true
+        System.out.println(escapeMatch(word5, pattern5)); // false
 
         String word6 = "example";
         String pattern6 = "e10e";
-        System.out.println(isMatch(word6, pattern6)); // false
+        System.out.println(multipleDigitalMatch(word6, pattern6)); // false
     }
 }
