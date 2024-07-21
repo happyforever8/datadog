@@ -172,3 +172,90 @@ Log q3
 queriesDict: {hello1world1=1, data1failure1=2, error1system1=3}
 revertedIdx: {system=[3], world=[1], data=[2], failure=[2], hello=[1], error=[3]}
 queries: {3={system=1, error=1}}
+
+
+如果不需要考虑出现次数，那么做相应简化即可，思路是一样的。
+========================================
+package Tests;
+
+import java.util.*;
+
+public class LogsAndQueries2 {
+    private Map<Set<String>, Integer> queriesDict;
+    private Map<String, List<Integer>> revertedIdx;
+    private int id;
+
+    public LogsAndQueries2() {
+        this.queriesDict = new HashMap<>();
+        this.revertedIdx = new HashMap<>();
+        this.id = 1;
+    }
+
+    // Helper method to get a sorted set of words
+    private Set<String> getSortedWords(String[] words) {
+        return new TreeSet<>(Arrays.asList(words));
+    }
+
+    public void input(String entry) {
+        String[] parts = entry.split(":");
+        String tp = parts[0];
+        String content = parts[1].trim();
+        String[] words = content.split(" ");
+        Set<String> sortedWords = getSortedWords(words);
+
+        if (tp.equals("Q")) {
+            if (!queriesDict.containsKey(sortedWords)) {
+                queriesDict.put(sortedWords, id);
+                for (String word : sortedWords) {
+                    revertedIdx.computeIfAbsent(word, k -> new ArrayList<>()).add(id);
+                }
+                id++;
+            }
+            System.out.println("receive query " + queriesDict.get(sortedWords));
+        } else {
+            List<Integer> result = new ArrayList<>();
+            Map<Integer, Set<String>> queries = new HashMap<>();
+            for (String word : words) {
+                if (revertedIdx.containsKey(word)) {
+                    for (int q : revertedIdx.get(word)) {
+                        queries.computeIfAbsent(q, k -> new TreeSet<>()).add(word);
+                    }
+                }
+            }
+            for (Map.Entry<Integer, Set<String>> entrySet : queries.entrySet()) {
+                int cq = entrySet.getKey();
+                Set<String> chash = getSortedWords(entrySet.getValue().toArray(new String[0]));
+                if (queriesDict.containsKey(chash) && queriesDict.get(chash) == cq) {
+                    result.add(cq);
+                }
+            }
+            System.out.println("receive log and the relevant queries are " + result);
+
+            System.out.println("queriesDict: " + queriesDict);
+            System.out.println("revertedIdx: " + revertedIdx);
+            System.out.println("queries: " + queries);
+
+            System.out.println("==========================");
+        }
+    }
+
+    public static void main(String[] args) {
+        String[] entries = {
+                "Q: hello world",
+                "Q: data failure",
+                "Q: world hello",
+                "Q: world hello hello",
+                "L: hello world we have a data failure hello",
+                "L: oh no system error",
+                "Q: system error",
+                "L: oh no system error again"
+        };
+
+        LogsAndQueries2 logsAndQueries2 = new LogsAndQueries2();
+        for (String entry : entries) {
+            logsAndQueries2.input(entry);
+        }
+    }
+}
+
+    
