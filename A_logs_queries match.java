@@ -157,23 +157,38 @@ public class LogsAndQueries {
 }
 
 Registered q1
+queriesDict: {hello1world1=1}
+revertedIdx: {world=[1], hello=[1]}
+=====================
 Registered q2
+queriesDict: {hello1world1=1, data1failure1=2}
+revertedIdx: {world=[1], data=[2], failure=[2], hello=[1]}
+=====================
 Registered q1
+queriesDict: {hello1world1=1, data1failure1=2}
+revertedIdx: {world=[1], data=[2], failure=[2], hello=[1]}
+=====================
 Log q1 q2 
 queriesDict: {hello1world1=1, data1failure1=2}
 revertedIdx: {world=[1], data=[2], failure=[2], hello=[1]}
 queries: {1={world=1, hello=1}, 2={data=1, failure=1}}
+=====================
 Log
 queriesDict: {hello1world1=1, data1failure1=2}
 revertedIdx: {world=[1], data=[2], failure=[2], hello=[1]}
 queries: {}
+=====================
 Registered q3
+queriesDict: {hello1world1=1, data1failure1=2, error1system1=3}
+revertedIdx: {system=[3], world=[1], data=[2], failure=[2], hello=[1], error=[3]}
+=====================
 Log q3 
 queriesDict: {hello1world1=1, data1failure1=2, error1system1=3}
 revertedIdx: {system=[3], world=[1], data=[2], failure=[2], hello=[1], error=[3]}
 queries: {3={system=1, error=1}}
+=====================
 
-
+========================================
 如果不需要考虑出现次数，那么做相应简化即可，思路是一样的。
 ========================================
 package Tests;
