@@ -35,7 +35,17 @@ dp[i][j] 可以由 dp[i-1][k] + days[i][j] 转移而来，其中 k 是前一周�
 求解：
 迭代每一周和每一个城市，计算最大假期天数。
 
-   
+Definition of state:
+dp[i][j] represents the maximum number of vacation days in city j during week i.
+
+Transition equation:
+dp[i][j] can be derived from dp[i-1][k] + days[i][j], where k is the city that can be chosen in the previous week.
+
+Initialization:
+The vacation days for week 0 are directly determined by days[0][j] since there is no previous week.
+
+Solution:
+Iterate through each week and each city to calculate the maximum number of vacation days.
 
 //public class MaxVacationDays {
 
@@ -51,11 +61,20 @@ dp[i][j] 可以由 dp[i-1][k] + days[i][j] 转移而来，其中 k 是前一周�
             dp[0][j] = days[0][j];
         }
 
+   // 第三层循环是关键，因为当前周的假期天数取决于前一周每一个可能的城市的假期天数。
+   // 假设你在第 i 周的城市 j，你可以从前一周的任何一个城市 l 转移过来。
+   // 为了找到在第 i 周城市 j 的最大假期天数，你必须考虑所有可能的前一周的城市 l，并选择其中的最大值。
+
+
+
         // 动态规划计算每一周的假期天数
-        for (int i = 1; i < n; i++) {
-            for (int j = 0; j < k; j++) {
+        for (int i = 1; i < n; i++) { // 从第 1 周开始迭代到最后一周
+            for (int j = 0; j < k; j++) { // 对于每一个城市
                 dp[i][j] = 0;
-                for (int l = 0; l < k; l++) {
+                 //遍历前一周的所有城市：通过 for (int l = 0; l < k; l++) 遍历前一周的每一个城市 l。
+                //计算转移到当前城市的假期天数：通过 dp[i-1][l] + days[i][j] 
+                //计算从前一周城市 l 转移到本周城市 j 后的假期天数。
+                for (int l = 0; l < k; l++) { // 考虑从前一周的所有城市 l 转移到本周的城市 j
                     dp[i][j] = Math.max(dp[i][j], dp[i-1][l] + days[i][j]);
                 }
             }
