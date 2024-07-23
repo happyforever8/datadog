@@ -23,6 +23,7 @@ public class HighPerformanceFilter {
     Map<String, Set<Integer>> streamMap = new HashMap<>();
     List<String> stream = new ArrayList<>();
 
+    // add is O(m), m is the length of the tag
     public void addTag(String tag){
         int index = stream.size();
         for(String s : tag.split(",")){
@@ -36,6 +37,11 @@ public class HighPerformanceFilter {
         System.out.println("add tag ===============");
     }
 
+    // o(k*d) k is the number of keywords and d is the average number of documents per keyword.
+    // 0(m * n) where n is the number of documents. result set is O(m) per document.
+    // total is o(k * d) + o(n * m)
+
+    // space steammap is where t is the average number of tags per document and n is the number of documents.
     public Set<String> searchTags(List<String> keywords) {
         System.out.println("***********begin add tag ===============");
         System.out.println("Searching for keywords: " + keywords);
