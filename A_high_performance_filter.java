@@ -15,6 +15,24 @@ https://leetcode.com/discuss/interview-question/2639509/DataDog-Interview-Questi
 比如 filter by ['facebook', 'google']那么 return‍‍‍‌‍‍‍‍‍‍‌‌‍‍‍‌‌‍‍ ['apple', 'tesla','intuit']
 我是用hashmap 做Cache。 Follow up 是怎么更好的index 这个hashmap (Key 是啥，Value 是啥）。
 
+
+// Summary
+// Time Complexity:
+
+// where t is the average number of tags per document and
+//      n is the number of documents.
+//      m is the number of tags in the input string
+//      d is the average number of documents per keyword.
+// addTag: O(m)
+// searchTags: O(k * d + n * m * t)
+// Space Complexity:
+
+// streamMap: O(t * n)
+// stream: O(n)
+
+
+
+                                                    
 package Tests;
 
 import java.util.*;
