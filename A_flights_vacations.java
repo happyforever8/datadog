@@ -47,7 +47,11 @@ The vacation days for week 0 are directly determined by days[0][j] since there i
 Solution:
 Iterate through each week and each city to calculate the maximum number of vacation days.
 
-//public class MaxVacationDays {
+// Summary
+// Time Complexity: O(n * k^2)
+// Space Complexity: O(n * k)
+   
+public class MaxVacationDays {
 
     public int maxVacationDays(int[][] days) {
         int n = days.length;
@@ -142,6 +146,10 @@ dp[i][j][1] 表示第 i 周在城市 j 的最小飞行次数。
 求解：
 迭代每一周和每一个城市，计算最大假期天数和最小飞行次数。
 
+// Summary
+// Time Complexity: O(n * k^2)
+// Space Complexity: O(n * k)
+   
 public class MaxVacationDays {
 
     public int[] maxVacationDays(int[][] days) {
