@@ -50,6 +50,23 @@ public class LogsAndQueries {
 // revertedIdx: A Map that stores each word and the list of query IDs it appears in.
 // id: An integer used to assign a unique ID to each new query.
 
+
+//     Time Complexity:
+//here n is the number of words in the log entry,
+  // where m is the number of queries, 
+// and k is the number of unique words in each query.
+    
+
+// input: O(n) + time for handleQuery or handleLog.
+// handleQuery: O(k log k).
+// handleLog: O(n * m + m * k log k).
+// Space Complexity:
+
+// input: O(n) + space for handleQuery or handleLog.
+// handleQuery: O(k).
+// handleLog: O(m * k).
+
+
     private Map<String, Integer> queriesDict;
     private Map<String, List<Integer>> revertedIdx;
     private int id;
@@ -88,6 +105,9 @@ public class LogsAndQueries {
         }
     }
 
+        // Time
+    //overall time complexity: O(k log k) for sorting plus O(k) for updating structures, giving us O(k log k).
+    //where k is the number of unique words in the query.
     private void handleQuery(Map<String, Integer> counter) {
         String hash = getHash(counter);
         if (!queriesDict.containsKey(hash)) {
@@ -101,6 +121,12 @@ public class LogsAndQueries {
             System.out.println("Registered q" + queriesDict.get(hash));
         }
     }
+
+    //updating the map: O(n * m), where n is the number of words in the log entry,
+    // and m is the number of queries containing the word.
+    // Generating hashes for the queries in queries and 
+    //checking against queriesDict: O(m * k log k),
+    //where m is the number of queries, and k is the number of unique words in the query.
 
     private void handleLog(Map<String, Integer> counter, String[] words) {
         List<Integer> result = new ArrayList<>();
@@ -118,7 +144,7 @@ public class LogsAndQueries {
         }
 
         for (int queryId : queries.keySet()) {
-            String chash = getHash(queries.get(cq));
+            String chash = getHash(queries.get(queryId));
             if (queriesDict.containsKey(chash) && queriesDict.get(chash) == queryId) {
                 result.add(queryId);
             }
