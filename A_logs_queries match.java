@@ -117,10 +117,10 @@ public class LogsAndQueries {
             }
         }
 
-        for (int cq : queries.keySet()) {
+        for (int queryId : queries.keySet()) {
             String chash = getHash(queries.get(cq));
-            if (queriesDict.containsKey(chash) && queriesDict.get(chash) == cq) {
-                result.add(cq);
+            if (queriesDict.containsKey(chash) && queriesDict.get(chash) == queryId) {
+                result.add(queryId);
             }
         }
 
