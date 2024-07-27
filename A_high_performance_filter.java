@@ -50,9 +50,9 @@ public class HighPerformanceFilter {
             streamMap.get(s).add(index);
         }
         stream.add(tag);
-        System.out.println("Stream: " + stream);
-        System.out.println("StreamMap: " + streamMap);
-        System.out.println("add tag ===============");
+        // System.out.println("Stream: " + stream);
+        // System.out.println("StreamMap: " + streamMap);
+        // System.out.println("add tag ===============");
     }
 
     // o(k*d) k is the number of keywords and d is the average number of documents per keyword.
@@ -61,13 +61,11 @@ public class HighPerformanceFilter {
 
     // space steammap is where t is the average number of tags per document and n is the number of documents.
     public Set<String> searchTags(List<String> keywords) {
-        System.out.println("***********begin add tag ===============");
-        System.out.println("Searching for keywords: " + keywords);
         Map<Integer, Integer> counterMap = new HashMap<>();
         for(String keyword : keywords){
             for(int document : streamMap.getOrDefault(keyword, new HashSet<>())){
                 counterMap.put(document, counterMap.getOrDefault(document, 0)+1);
-                System.out.println("Document: " + document + ", Count: " + counterMap.get(document));
+               // System.out.println("Document: " + document + ", Count: " + counterMap.get(document));
             }
         }
         System.out.println("CounterMap: " + counterMap);
@@ -75,15 +73,15 @@ public class HighPerformanceFilter {
         for(int key : counterMap.keySet()){
             if(counterMap.get(key) == keywords.size()){
                 set.addAll(Arrays.asList(stream.get(key).split(", ")));
-                System.out.println("Matched Document: " + key + ", Tags: " + stream.get(key));
+                //System.out.println("Matched Document: " + key + ", Tags: " + stream.get(key));
             }
         }
 
-        System.out.println("ResultSet before removal: " + set);
+        //System.out.println("ResultSet before removal: " + set);
         for(String i : keywords){
             set.remove(i);
         }
-        System.out.println("ResultSet before removal: " + set);
+        //System.out.println("ResultSet before removal: " + set);
         return set;
     }
 
