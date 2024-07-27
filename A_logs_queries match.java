@@ -217,6 +217,10 @@ queries: {3={system=1, error=1}}
 ========================================
 如果不需要考虑出现次数，那么做相应简化即可，思路是一样的。
 ========================================
+
+  
+package Tests;
+
 package Tests;
 
 import java.util.*;
@@ -245,39 +249,64 @@ public class LogsAndQueries2 {
         Set<String> sortedWords = getSortedWords(words);
 
         if (tp.equals("Q")) {
-            if (!queriesDict.containsKey(sortedWords)) {
-                queriesDict.put(sortedWords, id);
-                for (String word : sortedWords) {
-                    revertedIdx.computeIfAbsent(word, k -> new ArrayList<>()).add(id);
-                }
-                id++;
-            }
-            System.out.println("receive query " + queriesDict.get(sortedWords));
+            handleQuery(sortedWords);
         } else {
-            List<Integer> result = new ArrayList<>();
-            Map<Integer, Set<String>> queries = new HashMap<>();
-            for (String word : words) {
-                if (revertedIdx.containsKey(word)) {
-                    for (int q : revertedIdx.get(word)) {
-                        queries.computeIfAbsent(q, k -> new TreeSet<>()).add(word);
-                    }
-                }
-            }
-            for (Map.Entry<Integer, Set<String>> entrySet : queries.entrySet()) {
-                int cq = entrySet.getKey();
-                Set<String> chash = getSortedWords(entrySet.getValue().toArray(new String[0]));
-                if (queriesDict.containsKey(chash) && queriesDict.get(chash) == cq) {
-                    result.add(cq);
-                }
-            }
-            System.out.println("receive log and the relevant queries are " + result);
-
-            System.out.println("queriesDict: " + queriesDict);
-            System.out.println("revertedIdx: " + revertedIdx);
-            System.out.println("queries: " + queries);
-
-            System.out.println("==========================");
+            handleLog(words);
         }
+    }
+
+    // Handles the processing of queries
+    private void handleQuery(Set<String> sortedWords) {
+        // For Queries:
+        // Time Complexity: O(n log n)
+        // Space Complexity: O(q * n)
+      //q is the number of queries that have been processed.
+        if (!queriesDict.containsKey(sortedWords)) {
+            queriesDict.put(sortedWords, id);
+            for (String word : sortedWords) {
+                revertedIdx.computeIfAbsent(word, k -> new ArrayList<>()).add(id);
+            }
+            id++;
+        }
+        System.out.println("receive query " + queriesDict.get(sortedWords));
+    }
+
+    // Handles the processing of logs
+          // For Logs:
+        // Time Complexity: O(n log n + qw log w)
+        // Space Complexity: O(q * n + w * q)
+
+      // Similar to the query part, splitting and sorting take O(n log n)
+      //Adding words to the TreeSet in queries map: logw
+    
+      // n is the number of words in a query or a log entry.
+      // q is the number of queries that have been processed.
+      // w is the number of unique words in the logs.
+    private void handleLog(String[] words) {
+
+        List<Integer> result = new ArrayList<>();
+        Map<Integer, Set<String>> queries = new HashMap<>();
+        for (String word : words) {
+            if (revertedIdx.containsKey(word)) {
+                for (int q : revertedIdx.get(word)) {
+                    queries.computeIfAbsent(q, k -> new TreeSet<>()).add(word);
+                }
+            }
+        }
+        for (Map.Entry<Integer, Set<String>> entrySet : queries.entrySet()) {
+            int qId = entrySet.getKey();
+            Set<String> chash = getSortedWords(entrySet.getValue().toArray(new String[0]));
+            if (queriesDict.containsKey(chash) && queriesDict.get(chash) == qId) {
+                result.add(qId);
+            }
+        }
+        System.out.println("receive log and the relevant queries are " + result);
+
+        System.out.println("queriesDict: " + queriesDict);
+        System.out.println("revertedIdx: " + revertedIdx);
+        System.out.println("queries: " + queries);
+
+        System.out.println("==========================");
     }
 
     public static void main(String[] args) {
@@ -298,6 +327,7 @@ public class LogsAndQueries2 {
         }
     }
 }
+
 
 receive query 1
 receive query 2
