@@ -109,6 +109,61 @@ public class BufferedFile {
         System.out.println(bufferedFile.getDiskStorage()); // Output: [Hello, World]
     }
 }
+
+============== add error handling and thread safe=======================
+  import java.util.ArrayList;
+import java.util.List;
+
+public class BufferedFile {
+    private final int maxBufferedSize;
+    private final StringBuilder buffer;
+    private final List<String> diskStorage;
+
+    public BufferedFile(int maxBufferedSize) {
+        this.maxBufferedSize = maxBufferedSize;
+        this.buffer = new StringBuilder();
+        this.diskStorage = new ArrayList<>();
+    }
+
+    public synchronized void write(String content) {
+        buffer.append(content);
+        while (buffer.length() >= maxBufferedSize) {
+            flush();
+        }
+    }
+
+    private synchronized void flush() {
+        try {
+            while (buffer.length() >= maxBufferedSize) {
+                diskStorage.add(buffer.substring(0, maxBufferedSize));
+                buffer.delete(0, maxBufferedSize);
+            }
+            if (buffer.length() > 0 && buffer.length() < maxBufferedSize) {
+                diskStorage.add(buffer.toString());
+                buffer.setLength(0); // Clear the buffer
+            }
+        } catch (Exception e) {
+            System.err.println("Error during flush: " + e.getMessage());
+        }
+    }
+
+    public synchronized List<String> getDiskStorage() {
+        return new ArrayList<>(diskStorage); // Return a copy to preserve encapsulation
+    }
+
+    public static void main(String[] args) {
+        BufferedFile bufferedFile = new BufferedFile(5);
+        bufferedFile.write("HelloWorld");
+
+        // Printing the contents of the diskStorage
+        System.out.println(bufferedFile.getDiskStorage()); // Output: [Hello, World]
+    }
+}
+
+
+
+
+
 使用 StringBuilder：
 
 替换了 List<Character>，因为 StringBuilder 对字符追加操作更高效。
