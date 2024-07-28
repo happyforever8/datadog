@@ -145,7 +145,9 @@ public class LogsAndQueries {
 
         for (int queryId : queries.keySet()) {
             String chash = getHash(queries.get(queryId));
-            if (queriesDict.containsKey(chash) && queriesDict.get(chash) == queryId) {
+            if (queriesDict.containsKey(chash)
+               // && queriesDict.get(chash) == queryId  -- seems do not need this
+               ) {
                 result.add(queryId);
             }
         }
