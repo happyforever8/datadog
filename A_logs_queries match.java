@@ -93,26 +93,26 @@ public class LogsAndQueries {
         String type = parts[0].trim();
         String content = parts[1].trim();
         String[] words = content.split(" ");
-        Map<String, Integer> counter = new HashMap<>();
+        Map<String, Integer> counterMap = new HashMap<>();
         for (String word : words) {
-            counter.put(word, counter.getOrDefault(word, 0) + 1);
+            counterMap.put(word, counterMap.getOrDefault(word, 0) + 1);
         }
 
         if (type.equals("Q")) {
-            handleQuery(counter);
+            handleQuery(counterMap);
         } else {
-            handleLog(counter, words);
+            handleLog(counterMap, words);
         }
     }
 
         // Time
     //overall time complexity: O(k log k) for sorting plus O(k) for updating structures, giving us O(k log k).
     //where k is the number of unique words in the query.
-    private void handleQuery(Map<String, Integer> counter) {
-        String hash = getHash(counter);
+    private void handleQuery(Map<String, Integer> counterMap) {
+        String hash = getHash(counterMap);
         if (!queriesDict.containsKey(hash)) {
             queriesDict.put(hash, id);
-            for (String word : counter.keySet()) {
+            for (String word : counterMap.keySet()) {
                 revertedIdx.computeIfAbsent(word, k -> new ArrayList<>()).add(id);
             }
             System.out.println("Registered q" + id);
@@ -128,7 +128,7 @@ public class LogsAndQueries {
     //checking against queriesDict: O(m * k log k),
     //where m is the number of queries, and k is the number of unique words in the query.
 
-    private void handleLog(Map<String, Integer> counter, String[] words) {
+    private void handleLog(Map<String, Integer> counterMap, String[] words) {
         List<Integer> result = new ArrayList<>();
         // It creates a temporary Map called queries to store each query and the words it matches in the current log. 
         //     It then generates a hash for each query in the log and checks
