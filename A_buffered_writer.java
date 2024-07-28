@@ -162,6 +162,24 @@ public class BufferedFile {
 
 
 
+// n is the total length of the content being written before flushing.
+// k is the average length of each substring (in this case, maxBufferedSize).  
+// Write Operation:
+
+// Time Complexity: o(n)
+// Space Complexity: O(n)
+
+// Flush Operation:
+
+// Time Complexity: O(n)
+
+// Space Complexity: O(n)
+
+// Get Disk Storage Operation:
+
+// Time Complexity: O(k)
+// Space Complexity: O(k)
+
 
 
 使用 StringBuilder：
