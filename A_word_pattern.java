@@ -16,6 +16,8 @@ isMatch("datadog", "datadogs") => false
 isMatch("3", "aaa") => true
 isMatch("3", "aa") => false
 
+  // time is O(n)
+  // space is O(1)
 
  package Tests;
 
